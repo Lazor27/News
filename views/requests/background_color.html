@@ -1,0 +1,15 @@
+<script type="text/javascript">
+
+  $(document).ready(function () {
+    $.ajax({
+      type: "POST",
+      url: "/requests/background_color/", // Обработчик.
+      data: "search=" + 1,
+      dataType: "html",
+      cache: false,
+      success: function (data) {
+        $('body').css("background-color",data);
+      }
+    })
+  })
+</script>
