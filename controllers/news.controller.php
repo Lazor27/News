@@ -1,26 +1,15 @@
 <?php
-/**
- * here we have actions for news /
- * controller task is to form data witch he will sent to view /
- */
+
 class NewsController extends Controller {
 
-    /**
-     * NewsController constructor /
-     * use Article model /
-     * @param array $data
-     */
+ 
     public function __construct($data = array())
     {
         parent::__construct($data);
         $this->model = new Article();
     }
 
-    /**
-     * data for carousel with pictures for 1 article /
-     * @param $id
-     * @return bool
-     */
+    
     public function getCarouselData($id)
     {
         // data for OwlCarousel
@@ -48,13 +37,9 @@ class NewsController extends Controller {
     }
     
 
-    // actions for all visitors ====================
-    // index TODONE
-    // view TODONE
+   
 
-    /**
-     * default action for news and all site /
-     */
+    
     public function index()
     {
         $attr = $this->model->getAttributes();
@@ -92,12 +77,10 @@ class NewsController extends Controller {
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
 
 
-        // TODO pagination by 10
+        
     }
 
-    /**
-     * action for showing 1 article /
-     */
+    
     public function view()
     {
         $params = App::getRouter()->getParams();
@@ -120,14 +103,7 @@ class NewsController extends Controller {
     }
 
 
-    // actions for administrators ====================
-    // index TODONE
-    // view
-    //  add TODONE
-
-    /**
-     * admin action for showing all news /
-     */
+    
     public function admin_index() 
     {
         $attr = $this->model->getAttributes();
@@ -197,10 +173,7 @@ class NewsController extends Controller {
         $this->data['news'] = $this->model->getAnalyticalList();
     }
 
-    /**
-     * Tadding news /
-     */
-    
+  
 
 
     public function admin_add()
@@ -241,9 +214,7 @@ class NewsController extends Controller {
         }
     }
 
-    /**
-     * edit one news /
-     */
+    
     public function admin_edit()
     {
         $params = App::getRouter()->getParams();
@@ -295,13 +266,7 @@ class NewsController extends Controller {
     }
 
 
-    // actions for login users ====================
-    // index TODONE
-    // view TODONE
-
-    /**
-     * user action for news and all site /
-     */
+   
     public function user_index()
     {
         $attr = $this->model->getAttributes();
@@ -339,9 +304,7 @@ class NewsController extends Controller {
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
     }
 
-    /**
-     * user action for showing 1 article /
-     */
+    
     public function user_view()
     {
         $params = App::getRouter()->getParams();
@@ -375,9 +338,7 @@ class NewsController extends Controller {
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
     }
 
-    /**
-     *action for analytical articles /
-     */
+    
     public function user_analytical()
     {
         $this->data['news'] = $this->model->getAnalyticalList();
@@ -390,15 +351,6 @@ class NewsController extends Controller {
     }
 
 
-    // actions for moderators ====================
-
-    /**
-     * TODO moderator can edit articles
-     *
-     */
-    public function moderator_index()
-    {
-        // TODO same as index()
-    }
+   
     
 }

@@ -1,27 +1,17 @@
 <?php
-/**
- * controller for log in and log out /
- * use User model /
- */
+
+ // controller for log in and log out 
+ 
 class UsersController extends Controller{
 
-    /**
-     * UsersController constructor /
-     * create User model /
-     * @param array $data
-     */
+    
     public function __construct($data = array())
     {
         parent::__construct($data);
         $this->model = new User();
     }
 
-    /**
-     * action for login for all roles /
-     * set Session[login] /
-     * set Session[role] /
-     */
-    public function login()
+        public function login()
     {
         // data for advertising
         $this->data['adv'] = $this->model->getAdvertising();
@@ -55,18 +45,14 @@ class UsersController extends Controller{
         }
     }
     
-    /**
-     * destroy Session and redirect to / /
-     */
+    
     public function logout()
     {
         Session::destroy();
         Router::redirect('/');
     }
 
-    /**
-     * action for registration users /
-     */
+    
     public function registration()
     {
         // data for advertising
@@ -117,9 +103,7 @@ class UsersController extends Controller{
         }
     }
 
-    /**
-     * To show all users /
-     */
+   
     public function index()
     {
         // we have data variable in parent class
@@ -132,9 +116,7 @@ class UsersController extends Controller{
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
     }
 
-    /**
-     * show 1 user with all his comments /
-     */
+    
     public function view()
     {
         $params = App::getRouter()->getParams();
@@ -145,9 +127,7 @@ class UsersController extends Controller{
             $this->data['user_comments'] = $this->model->getUserComments($id);
         }
 
-        /*
-         * create array for pagination tree
-         */
+        
         $count_rows  = 0;
         $this->data['pagination_news'] = array();
         foreach($this->data['user_comments'] as $comment) {
@@ -167,18 +147,16 @@ class UsersController extends Controller{
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
     }
     
-    /**
-     * action for watching all users /
-     */
+    
     public function admin_index() 
     {
         // we have data variable in parent class
         $this->data['users'] = $this->model->getUsersList();
     }
 
-    /**
-     * show 1 user with all his comments /
-     */
+    
+   // show 1 user with all his comments 
+    
     public function admin_view()
     {
         $params = App::getRouter()->getParams();
@@ -189,9 +167,7 @@ class UsersController extends Controller{
             $this->data['user_comments'] = $this->model->getUserComments($id);
         }
 
-        /*
-         * create array for pagination tree
-         */
+        
         $count_rows  = 0;
         $this->data['pagination_news'] = array();
         foreach($this->data['user_comments'] as $comment) {
@@ -205,9 +181,7 @@ class UsersController extends Controller{
         $this->data['last_pag'] = (int)(count($this->data['user_comments'])/20)-1;
     }
 
-    /**
-     * action for watching all /
-     */
+    
     public function user_index ()
     {
         // we have data variable in parent class
@@ -220,9 +194,7 @@ class UsersController extends Controller{
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
     }
 
-    /**
-     * show 1 user with all his comments /
-     */
+    
     public function user_view()
     {
         $params = App::getRouter()->getParams();
@@ -233,9 +205,6 @@ class UsersController extends Controller{
             $this->data['user_comments'] = $this->model->getUserComments($id);
         }
 
-        /*
-         * create array for pagination tree
-         */
         $count_rows  = 0;
         $this->data['pagination_news'] = array();
         foreach($this->data['user_comments'] as $comment) {

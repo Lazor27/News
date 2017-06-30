@@ -89,7 +89,7 @@ SELECT *
             $user = $this->db->query($sql);
 
             $user_color= $user[0]['background_color'];
-            if($user[0]['background_color']==null){
+            if($user_color==null){
                $sql = "
 SELECT * 
   FROM user
@@ -121,7 +121,7 @@ SELECT *
             $user = $this->db->query($sql);
 
             $user_color= $user[0]['color'];
-            if ($user[0]['color']==null){
+            if ($user_color==null){
                  $sql = "
 SELECT * 
   FROM user

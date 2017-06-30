@@ -73,21 +73,7 @@ class TagsController extends Controller {
         $this->data['current_pag'] = (isset($params[1])) ? $params[1] : 0;
         $this->data['last_pag'] = (int)(count($this->data['tag_news'])/5)-1;
     }
-    public function admin_add()
-    {
-//        if ( $_POST ) {
-//            $result = $this->model->save($_POST);
-//            echo "<pre>";
-//            print_r($_POST);
-//            die;
-//            if ($result) {
-//                Session::setFlash('Article was saved.');
-//            } else {
-//                Session::setFlash('Error');
-//            }
-//            Router::redirect('/admin/news/');
-//        }
-    }
+  
 
     public function user_index()
     {

@@ -7,7 +7,7 @@ function __autoload($class_name)
 {
     $lib_path = ROOT.DS.'lib'.DS.strtolower($class_name).'.class.php';
     
-    // str_replace все вхождения controller в $class_name заменены на пустую строку
+    
     $controllers_path = ROOT.DS.'controllers'.DS.str_replace('controller','',strtolower($class_name)).'.controller.php';
     $model_path = ROOT.DS.'models'.DS.strtolower($class_name).'.php';
     
