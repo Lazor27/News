@@ -102,7 +102,7 @@ SELECT *
             }
             echo $user_color;
         } else {
-            echo 'yellow';
+            echo '#D7D7D7';
         }
         exit;
     }
@@ -134,7 +134,7 @@ SELECT *
             }
             echo $user_color;
         } else {
-            echo 'red';
+            echo '#8D0005';
         }
         exit;
     }
