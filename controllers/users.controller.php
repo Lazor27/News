@@ -29,21 +29,24 @@ class UsersController extends Controller{
                     Session::set('id', $user['id']);
                     Session::set('login', $user['login']);
                     Session::set('role', $user['role']);
+                }else{
+                     Session::setFlash('Login and password are incorrect');
+                     return false;
                 }
 
                 if (Session::get('role') == 'admin') {
                     Router::redirect('/admin/');
-                } else {
+                } else  {
                     Router::redirect('/user/');
                 }
-            } else {
-                Session::setFlash('Please fill in all fields');
-            }
-        } else {
-            Session::setFlash('Login and password are incorrect');
-            return false;
-        }
+             
+         }else{
+        Session::setFlash('Please fill in all fields');
+            
     }
+        
+    } 
+}
     
     
     public function logout()

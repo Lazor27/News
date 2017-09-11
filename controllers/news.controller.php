@@ -239,7 +239,7 @@ class NewsController extends Controller {
         }
 
         $id = $this->data['article']['id'];
-        $dir_name = ROOT . DS . "webroot" . DS . "uploads" . DS . $id . DS;
+        $dir_name = ROOT . DS . "webroot" . DS . "img" . DS . $id . DS;
         if ($_FILES) {
             if (file_exists($dir_name)) {
                 foreach ($_FILES['image']['error'] as $key => $error) {
@@ -252,7 +252,7 @@ class NewsController extends Controller {
                     }
                 }
             } else {
-                mkdir(ROOT . DS . "webroot" . DS . "uploads" . DS . $id); // create folder
+                mkdir(ROOT . DS . "webroot" . DS . "img" . DS . $id); // create folder
                 foreach ($_FILES['image']['error'] as $key => $error) {
 
                     if ($error == UPLOAD_ERR_OK) {
@@ -325,7 +325,7 @@ class NewsController extends Controller {
         if($_POST) {
 
             $id_news = $_POST['id_news'];
-            $id_user = $_POST['id_user'];
+            $id_user=Session::get('id');
             $id_parent = $_POST['id_parent'];
             $text = $_POST['text'];
             $this->model->saveComment($id_news,$id_user,$id_parent,$text);
