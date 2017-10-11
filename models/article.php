@@ -359,10 +359,11 @@ SELECT *
      * @param $id_comment
      * @return
      */
-    public function getArticleComments($id_comment) 
+    public function getArticleComments($id_comment, $id_news) 
     {
         $id = $this->db->escape($id_comment);
-        $sql = "
+        $sql="SELECT comment.id,comment.id_user,comment.id_parent,comment.text,comment.plus,comment.minus,comment.create_date_time,comment.approved,comment.id_news, user.login  from comment join user on id_news = $id_news  and comment.id_user = user.id";
+        /*$sql = "
 SELECT *
 FROM user
   JOIN news ON user.id = news.id_user
@@ -378,15 +379,16 @@ FROM user
 WHERE news.id = '{$id}'
       AND comment.plus <> (SELECT plus FROM comment WHERE id_news='{$id}' ORDER BY plus DESC LIMIT 1)
       AND comment.approved IS NOT NULL;
-";
+";*/
 
         return $this->db->query($sql);
     }
 
     public function saveComment( $id_news,$id_user,$id_parent,$id_text)
-    {
+    {     
         $news = $this->db->escape($id_news);
         $user = $this->db->escape($id_user);
+        
         $parent = $this->db->escape($id_parent);
         $text = $this->db->escape($id_text);
 
@@ -402,7 +404,7 @@ WHERE category.id NOT IN (SELECT t2.id FROM category AS t1
                                             AND news.id = '$id_news';
                                             ";
 
-        $approved = ($this->db->query($sql_1)==null) ? "" : 1;
+        $approved = ($this->db->query($sql_1)==null) ? 0 : 1;
 
         $sql = "
 INSERT INTO comment (id_user,id_parent,text,id_news,approved) 

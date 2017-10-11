@@ -89,7 +89,8 @@ class NewsController extends Controller {
             $id = strtolower($params[0]);
             $this->data['article'] = $this->model->getByID($id);
             $this->data['article_tags'] = $this->model->getArticleTags($id);
-            $this->data['article_comments'] = $this->model->getArticleComments($id);
+            $id_news = $this->data['article']['id'];
+            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news);
 
             
             $this->getCarouselData($id);
@@ -146,7 +147,8 @@ class NewsController extends Controller {
             $id = strtolower($params[0]);
             $this->data['article'] = $this->model->getByID($id);
             $this->data['article_tags'] = $this->model->getArticleTags($id);
-            $this->data['article_comments'] = $this->model->getArticleComments($id);
+            $id_news = $this->data['article']['id'];
+            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news);
 
             $id_user=Session::get('id');
             $this->data['user'] = $this->model->getArticleUser($id_user);
@@ -155,12 +157,14 @@ class NewsController extends Controller {
 
         if($_POST) {
 
-            $id_news = $_POST['id_news'];
-            $id_user = $_POST['id_user'];
-            $this->data['user'] = $this->model->getArticleUser($id_user);
-            $id_parent = $_POST['id_parent'];
+            $id_news = $this->data['article']['id'];
+           
+            $id_user=Session::get('id');
+            
+            $id_parent = '0';
             $text = $_POST['text'];
             $this->model->saveComment($id_news,$id_user,$id_parent,$text);
+            header('Location: http://138.68.107.38/admin/news/view/'.$id_news);
         }
     }
 
@@ -312,23 +316,29 @@ class NewsController extends Controller {
         if (isset($params[0])) {
 
             $id = strtolower($params[0]);
+            
             $this->data['article'] = $this->model->getByID($id);
             $this->data['article_tags'] = $this->model->getArticleTags($id);
-            $this->data['article_comments'] = $this->model->getArticleComments($id);
-
+            $id_news = $this->data['article']['id'];
+            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news);
+            //var_dump($this->data['article_comments']);
             $id_user=Session::get('id');
-            $this->data['user'] = $this->model->getArticleUser($id_user);
+            $this->data['user'] = $this->model->getArticleUser($id_user); 
+            //$this->data['']
             $this->getCarouselData($id);
 
         }
 
         if($_POST) {
 
-            $id_news = $_POST['id_news'];
+            $id_news = $this->data['article']['id'];
+           
             $id_user=Session::get('id');
-            $id_parent = $_POST['id_parent'];
+            
+            $id_parent = '0';
             $text = $_POST['text'];
             $this->model->saveComment($id_news,$id_user,$id_parent,$text);
+            header('Location: http://138.68.107.38/user/news/view/'.$id_news);
         }
 
         // data for advertising
@@ -336,6 +346,7 @@ class NewsController extends Controller {
         shuffle($this->data['adv']);
         $this->data['adv_left'] = array_slice($this->data['adv'],0,4);
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
+
     }
 
     

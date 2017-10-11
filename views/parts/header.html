@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse">
 
       <ul class="nav navbar-nav">
-          <?php print_r(Session::get('role'));?>
+         
         <li <?php if(App::getRouter()->getController() == 'home')       {?> class="active" <?php }?> > <a href="<?=$role?>/home/">       HOME       </a></li>
         <li <?php if(App::getRouter()->getController() == 'news')       {?> class="active" <?php }?> > <a href="<?=$role?>/news/">       NEWS       </a></li>
         <li <?php if (App::getRouter()->getController() == 'categories') { ?> class="active dropdown" <?php } else { ?> class="dropdown" <?php }?> >

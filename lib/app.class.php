@@ -78,6 +78,8 @@ class App {
         
         // compact creates array from variables
         $layout_view_object = new View(compact('content'),$layout_path);
+
         echo $layout_view_object->render();
+       // header("Location: http://138.68.107.38/$uri");
     }
 }

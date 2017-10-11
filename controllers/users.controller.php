@@ -94,10 +94,9 @@ class UsersController extends Controller{
                 
                 $this->model->registerUser($first_name, $second_name, $login, $email, $password, $date);
 
-                Session::set('login',$login);
-                Session::set('role','user');
                 
-                Router::redirect('/user/'); // to the home page
+                
+                Router::redirect('/users/login/'); // to the home page
             } else { 
                 Session::setFlash('Please fill in all fields!');
             }

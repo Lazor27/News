@@ -12,8 +12,25 @@
       break;
     default:
       break;
-  }
-  foreach($data['article_comments'] as $comment) {
+  }?>
+
+<?php if ($role == '/admin' || $role == '/user') {?>
+    <form role="form" class="form-inline" action="" method="post">
+    <div class="col-md-12">
+     
+      <textarea type="text" name="text" class="text_of_comment" placeholder="Put your comment here " style="width:50%;"></textarea>
+      <br>
+      <input type="submit" class="submit_comment btn btn-active" value="Submit"/>
+    </div>
+    </form>
+
+  <?php }   ?>
+
+
+
+
+
+  <?php   foreach($data['article_comments'] as $comment) {
     if ($comment['id_parent'] == 0) { ?>
 
       <div class="container-fluid">
@@ -90,32 +107,10 @@
           <?php
         }
       }
-      if ($role == '/admin' || $role == '/user') { ?>
-        <form role="form" class="form-inline" action="" method="post">
-          <div class="col-md-12">
-            <input type="hidden" name="id_news" value="<?= $data['article']['id'] ?>">
-            <input type="hidden" name="id_user" value="<?= Session::get('id') ?>">
-            <input type="hidden" name="id_parent" value="<?= $comment['id'] ?>">
-            <textarea type="text" name="text" class="text_of_comment" placeholder="Put your answer to comment here "
-                      style="width:300%;"></textarea>
-            <input type="submit" class="submit_comment btn btn-active" value="Submit"/>
-          </div>
-        </form>
-      <?php
+      
       }
     }
-  }
-
+  
+ 
   ?>
-  <?php if ($role == '/admin' || $role == '/user') {?>
-    <form role="form" class="form-inline" action="" method="post">
-    <div class="col-md-12">
-      <input type="hidden" name="id_news" value="<?=$data['article']['id']?>">
-      <input type="hidden" name="id_user" value="<?=Session::get('id')?>">
-      <input type="hidden" name="id_parent" value="0">
-      <textarea type="text" name="text" class="text_of_comment" placeholder="Put your comment here " style="width:300%;"></textarea>
-      <input type="submit" class="submit_comment btn btn-active" value="Submit"/>
-    </div>
-    </form>
-  <?php } ?>
-</div>
+  </div>

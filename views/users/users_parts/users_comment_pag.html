@@ -13,7 +13,12 @@
     default:
       break;
   }
-  foreach($data['pagination_comment'][$data['current_pag']] as $comment) { ?>
+  if(!isset($data['pagination_comment'])){
+  echo "This user has no comments";
+} else {
+  foreach($data['pagination_comment'] as $comments) { 
+    foreach($comments as $comment){
+  ?>
       
     <div class="container-fluid">
       <div class="row">
@@ -41,10 +46,10 @@
       </div>
     </div>
 
-  <?php }?>
+  <?php }}}?>
 </div>
 
-<!--pagination-->
+<!--pagination
 <ul class="pagination">
 
   <?php if($data['current_pag'] == 0) {?>
@@ -61,12 +66,4 @@
     <li><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/<?=($data['current_pag']-1)?>"> <?=$data['current_pag']?> </a></li>
     <li class="active"><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/<?=$data['current_pag']?>"> ... </a></li>
     <li class="active"><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/<?=$data['last_pag']?>"> >> </a></li>
-  <?php } else {?>
-
-    <li><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/0"> << </a></li>
-    <li><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/<?=($data['current_pag']-1)?>"> <?=$data['current_pag']?> </a></li>
-    <li class="active"><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/<?=$data['current_pag']?>"> ... </a></li>
-    <li><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/<?=($data['current_pag']+1)?>"> <?=($data['current_pag']+2)?> </a></li>
-    <li><a href="<?=$role?>/users/view/<?=$data['current_comment']?>/<?=$data['last_pag']?>"> >> </a></li>
-  <?php }?>
-</ul>
+  <?php } ?> -->
