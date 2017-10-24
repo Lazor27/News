@@ -42,6 +42,7 @@ class NewsController extends Controller {
     
     public function index()
     {
+                $params = App::getRouter()->getParams();
         $attr = $this->model->getAttributes();
         $attr_result = array();
         if (!empty($attr)) {
@@ -53,7 +54,7 @@ class NewsController extends Controller {
         }
         // data for checkboxes for filter
         $this->data['attributes'] = $attr_result;
-
+        if(isset($_REQUEST['filter'])){
         // array with selected filters
         $this->data['selected_filters'] = (isset($_REQUEST['filter']) && is_array($_REQUEST['filter'])) ? $_REQUEST['filter'] : array();
 
@@ -63,12 +64,26 @@ class NewsController extends Controller {
 
                 if (array_key_exists($f_value,$this->data['attributes'][$a_key])) {
                     $selected_attr[$a_key][] = $this->data['attributes'][$a_key][$f_value];
+                    $this->data['news'] = $this->model->getList($selected_attr);
                 }
             }
         }
-        
-        // we have data variable in parent class
-        $this->data['news'] = $this->model->getList($selected_attr);
+    }
+        elseif(count($params)){
+            $this->data['selected_filters'] = (isset($_REQUEST['filter']) && is_array($_REQUEST['filter'])) ? $_REQUEST['filter'] : array();
+            
+        $page = isset($params[0]) ? $params[0] : 1;
+       
+        $itemsCount = count($this->model->getList());
+        $p = new Pagination(array(
+            'itemsCount' => $itemsCount,
+            'itemsPerPage' => 80,
+            'currentPage' => $page
+            ));
+
+        $this->data['news'] = $this->model->getList(null,$page);
+
+         $this->data['p'] = $p;}
 
         // data for advertising
         $this->data['adv'] = $this->model->getAdvertising();
@@ -87,12 +102,24 @@ class NewsController extends Controller {
 
         if (isset($params[0])) {
             $id = strtolower($params[0]);
+            $page = isset($params[1]) ? (int)$params[1] : 1;
+
             $this->data['article'] = $this->model->getByID($id);
             $this->data['article_tags'] = $this->model->getArticleTags($id);
             $id_news = $this->data['article']['id'];
-            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news);
+            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news,$page);
+			
 
-            
+
+			$itemsCount = count($this->model->getArticleComments($id,$id_news));
+			            $p = new Pagination(array(
+			                'itemsCount' => $itemsCount,
+			                'itemsPerPage' => 5,
+			                'currentPage' => $page
+			                ));
+            $this->data['p'] = $p;
+
+
             $this->getCarouselData($id);
         }
 
@@ -107,6 +134,7 @@ class NewsController extends Controller {
     
     public function admin_index() 
     {
+                $params = App::getRouter()->getParams();
         $attr = $this->model->getAttributes();
         $attr_result = array();
         if (!empty($attr)) {
@@ -118,7 +146,7 @@ class NewsController extends Controller {
         }
         // data for checkboxes for filter
         $this->data['attributes'] = $attr_result;
-
+        if(isset($_REQUEST['filter'])){
         // array with selected filters
         $this->data['selected_filters'] = (isset($_REQUEST['filter']) && is_array($_REQUEST['filter'])) ? $_REQUEST['filter'] : array();
 
@@ -128,13 +156,27 @@ class NewsController extends Controller {
 
                 if (array_key_exists($f_value,$this->data['attributes'][$a_key])) {
                     $selected_attr[$a_key][] = $this->data['attributes'][$a_key][$f_value];
+                    $this->data['news'] = $this->model->getList($selected_attr);
                 }
             }
         }
-
-        // we have data variable in parent class
-        $this->data['news'] = $this->model->getList($selected_attr);
     }
+        elseif(count($params)){
+            $this->data['selected_filters'] = (isset($_REQUEST['filter']) && is_array($_REQUEST['filter'])) ? $_REQUEST['filter'] : array();
+            
+        $page = isset($params[0]) ? $params[0] : 1;
+       
+        $itemsCount = count($this->model->getList());
+        $p = new Pagination(array(
+            'itemsCount' => $itemsCount,
+            'itemsPerPage' => 80,
+            'currentPage' => $page
+            ));
+
+        $this->data['news'] = $this->model->getList(null,$page);
+
+         $this->data['p'] = $p;}
+     }
 
     /**
      * user action for showing 1 article /
@@ -145,26 +187,55 @@ class NewsController extends Controller {
 
         if (isset($params[0])) {
             $id = strtolower($params[0]);
+            $page = isset($params[1]) ? (int)$params[1] : 1;
+
             $this->data['article'] = $this->model->getByID($id);
             $this->data['article_tags'] = $this->model->getArticleTags($id);
             $id_news = $this->data['article']['id'];
-            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news);
+            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news,$page);
+			
 
-            $id_user=Session::get('id');
-            $this->data['user'] = $this->model->getArticleUser($id_user);
+
+			$itemsCount = count($this->model->getArticleComments($id,$id_news));
+			            $p = new Pagination(array(
+			                'itemsCount' => $itemsCount,
+			                'itemsPerPage' => 5,
+			                'currentPage' => $page
+			                ));
+            $this->data['p'] = $p;
+
+
             $this->getCarouselData($id);
         }
 
         if($_POST) {
-
             $id_news = $this->data['article']['id'];
-           
             $id_user=Session::get('id');
-            
             $id_parent = '0';
             $text = $_POST['text'];
+
+
+            if (!empty($_POST['text']) && !empty($_POST['capcha'])) {
+                if($_POST['capcha'] == Session::get('capcha')) {
+
+            
+           
+            
+            
+            
+            
             $this->model->saveComment($id_news,$id_user,$id_parent,$text);
-            header('Location: http://138.68.107.38/admin/news/view/'.$id_news);
+            header('Location: http://138.68.107.38//admin/news/view/'.$id_news.'/');
+            }else{
+                Session::setFlash('Please check captcha');
+
+        }
+
+        
+            }else{
+                Session::setFlash('Please fill in all fields');
+                
+            }
         }
     }
 
@@ -273,6 +344,7 @@ class NewsController extends Controller {
    
     public function user_index()
     {
+                $params = App::getRouter()->getParams();
         $attr = $this->model->getAttributes();
         $attr_result = array();
         if (!empty($attr)) {
@@ -284,7 +356,7 @@ class NewsController extends Controller {
         }
         // data for checkboxes for filter
         $this->data['attributes'] = $attr_result;
-
+        if(isset($_REQUEST['filter'])){
         // array with selected filters
         $this->data['selected_filters'] = (isset($_REQUEST['filter']) && is_array($_REQUEST['filter'])) ? $_REQUEST['filter'] : array();
 
@@ -294,12 +366,26 @@ class NewsController extends Controller {
 
                 if (array_key_exists($f_value,$this->data['attributes'][$a_key])) {
                     $selected_attr[$a_key][] = $this->data['attributes'][$a_key][$f_value];
+                    $this->data['news'] = $this->model->getList($selected_attr);
                 }
             }
         }
+    }
+        elseif(count($params)){
+            $this->data['selected_filters'] = (isset($_REQUEST['filter']) && is_array($_REQUEST['filter'])) ? $_REQUEST['filter'] : array();
+            
+        $page = isset($params[0]) ? $params[0] : 1;
+       
+        $itemsCount = count($this->model->getList());
+        $p = new Pagination(array(
+            'itemsCount' => $itemsCount,
+            'itemsPerPage' => 80,
+            'currentPage' => $page
+            ));
 
-        // we have data variable in parent class
-        $this->data['news'] = $this->model->getList($selected_attr);
+        $this->data['news'] = $this->model->getList(null,$page);
+
+         $this->data['p'] = $p;}
 
         // data for advertising
         $this->data['adv'] = $this->model->getAdvertising();
@@ -311,34 +397,64 @@ class NewsController extends Controller {
     
     public function user_view()
     {
+        
+         
         $params = App::getRouter()->getParams();
 
         if (isset($params[0])) {
 
             $id = strtolower($params[0]);
-            
+          
+            $page = isset($params[1]) ? (int)$params[1] : 1;
+
             $this->data['article'] = $this->model->getByID($id);
             $this->data['article_tags'] = $this->model->getArticleTags($id);
             $id_news = $this->data['article']['id'];
-            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news);
-            //var_dump($this->data['article_comments']);
-            $id_user=Session::get('id');
-            $this->data['user'] = $this->model->getArticleUser($id_user); 
-            //$this->data['']
+            $this->data['article_comments'] = $this->model->getArticleComments($id,$id_news,$page);
+			
+
+
+			$itemsCount = count($this->model->getArticleComments($id,$id_news));
+			            $p = new Pagination(array(
+			                'itemsCount' => $itemsCount,
+			                'itemsPerPage' => 5,
+			                'currentPage' => $page
+			                ));
+            $this->data['p'] = $p;
+
+
             $this->getCarouselData($id);
 
         }
 
         if($_POST) {
-
             $id_news = $this->data['article']['id'];
-           
             $id_user=Session::get('id');
-            
             $id_parent = '0';
             $text = $_POST['text'];
+
+
+            if (!empty($_POST['text']) && !empty($_POST['capcha'])) {
+                if($_POST['capcha'] == Session::get('capcha')) {
+
+            
+           
+            
+            
+            
+            
             $this->model->saveComment($id_news,$id_user,$id_parent,$text);
-            header('Location: http://138.68.107.38/user/news/view/'.$id_news);
+            header('Location: http://138.68.107.38//user/news/view/'.$id_news.'/');
+            }else{
+                Session::setFlash('Please check captcha');
+
+        }
+
+        
+            }else{
+                Session::setFlash('Please fill in all fields');
+                
+            }
         }
 
         // data for advertising

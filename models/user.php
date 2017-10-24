@@ -74,18 +74,30 @@ SELECT *
     }
 
   
-    public function getUserComments($id) 
+    public function getUserComments($id, $page = null) 
     {
         $id = $this->db->escape($id);
-        $sql = "
-SELECT *
-  FROM user
-    JOIN comment on user.id = comment.id_user
-      WHERE comment.text <> '' AND user.id = '{$id}'
-        ORDER BY comment.create_date_time
-";
+            if ($page == null) {
+                $sql =  "SELECT * FROM user
+                    JOIN comment on user.id = comment.id_user
+                      WHERE comment.text <> '' AND user.id = '{$id}'
+                        ORDER BY comment.create_date_time " ;
+            }else{
+
+                $count = 10;
+
+                $ofset = ($page - 1) * $count;
+
+
+                $sql ="SELECT * FROM user
+                    JOIN comment on user.id = comment.id_user
+                        WHERE comment.text <> '' AND user.id = '{$id}'
+                            ORDER BY comment.create_date_time  limit {$ofset} , {$count} ";
+            
+            }
+
         return $this->db->query($sql);
-    }
+}
 
    
     public function getAdvertising()

@@ -82,9 +82,9 @@ $p = $data['p'];
 
 foreach ($p->buttons as $button) :
     if ($button->isActive) : ?>
-       <li> <a href = '<?=$button->page?>'><?=$button->text?></a></li>
+        <a href = '<?=$button->page?>'><?=$button->text?></a>
     <?php else : ?>
-        <li><span style="color:#555555"><?=$button->text?></span></li>
+        <span style="color:#555555"><?=$button->text?></span>
     <?php endif;
 endforeach; }?>
 

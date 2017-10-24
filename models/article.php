@@ -9,12 +9,25 @@ class Article extends Model {
      * @param array $attr
      * @return mixed
      */
-    public function getList($attr = array())
+     public function getList($attr = array(),   $page = null)
     {
-        if (empty($attr)) {
+        if (empty($attr) && $page == null) {
+
+          
+
             $sql = "SELECT * FROM news ";
             return $this->db->query($sql); 
-        } else {
+        }   elseif   (isset($page) && empty($attr)) {
+           $count = 80;
+          $ofset = ($page - 1) * $count;
+          
+            $sql = "SELECT * FROM news LIMIT {$ofset}  , {$count}";
+            return $this->db->query($sql); 
+
+
+
+
+        }else{
 
             $sql_select = array();
             $sql_where = "";
@@ -72,14 +85,16 @@ class Article extends Model {
 //            print_r($sql_select['tag.name']);
 //            print_r($sql_where);
 //            die;
-
+          $count = 80;
+          $ofset = ($page - 1) * $count;
+          $limit =(isset($page)) ? " LIMIT {$ofset}, {$count}" : '';
             $sql = "
 SELECT DISTINCT news.title, news.* FROM news
   LEFT JOIN news_category ON news.id = news_category.id_news
   LEFT JOIN category ON news_category.id_category = category.id
   LEFT JOIN news_tag ON news.id = news_tag.id_news
   LEFT JOIN tag ON news_tag.id_tag = tag.id
-WHERE " . $sql_where;
+WHERE " . $sql_where . $limit;
 
             return $this->db->query($sql);
         }
@@ -359,27 +374,25 @@ SELECT *
      * @param $id_comment
      * @return
      */
-    public function getArticleComments($id_comment, $id_news) 
+    public function getArticleComments($id_comment, $id_news,$page = null) 
     {
         $id = $this->db->escape($id_comment);
-        $sql="SELECT comment.id,comment.id_user,comment.id_parent,comment.text,comment.plus,comment.minus,comment.create_date_time,comment.approved,comment.id_news, user.login  from comment join user on id_news = $id_news  and comment.id_user = user.id";
-        /*$sql = "
-SELECT *
-FROM user
-  JOIN news ON user.id = news.id_user
-  JOIN comment ON news.id = comment.id_news
-WHERE news.id = '{$id}'
-      AND comment.plus = (SELECT plus FROM comment WHERE id_news='{$id}' ORDER BY plus DESC LIMIT 1)
-      AND comment.approved IS NOT NULL
-UNION
-SELECT *
-FROM user
-  JOIN news ON user.id = news.id_user
-  JOIN comment ON news.id = comment.id_news
-WHERE news.id = '{$id}'
-      AND comment.plus <> (SELECT plus FROM comment WHERE id_news='{$id}' ORDER BY plus DESC LIMIT 1)
-      AND comment.approved IS NOT NULL;
-";*/
+        if ($page == null) {
+        $sql="SELECT comment.id,comment.id_user,comment.id_parent,comment.text,comment.plus,comment.minus,comment.create_date_time,comment.approved,comment.id_news, user.login  from comment join user on id_news = $id_news  and comment.id_user = user.id";  
+        } else {
+
+          $count = 5;
+
+                $ofset = ($page - 1) * $count;
+
+
+                $sql="SELECT comment.id,comment.id_user,comment.id_parent,comment.text,comment.plus,comment.minus,comment.create_date_time,comment.approved,comment.id_news, user.login  from comment join user on id_news = $id_news  and comment.id_user = user.id order by comment.id desc limit {$ofset} , {$count}";
+
+
+
+
+        }
+      
 
         return $this->db->query($sql);
     }

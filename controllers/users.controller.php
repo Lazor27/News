@@ -20,7 +20,8 @@ class UsersController extends Controller{
         $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
 
         if ($_POST) {
-            if (!empty($_POST['login']) && !empty($_POST['password'])) {
+            if (!empty($_POST['login']) && !empty($_POST['password']) && !empty($_POST['capcha'])) {
+                if($_POST['capcha'] == Session::get('capcha')){
 
                 $user = $this->model->getByLogin($_POST['login']); // false or true
                 $hash = md5(Config::get('salt') . $_POST['password']);
@@ -38,7 +39,7 @@ class UsersController extends Controller{
                     Router::redirect('/admin/');
                 } else  {
                     Router::redirect('/user/');
-                }
+                }}else{Session::setFlash('Please check captcha!');}
              
          }else{
         Session::setFlash('Please fill in all fields');
@@ -125,11 +126,24 @@ class UsersController extends Controller{
 
         if (isset($params[0])) {
             $id = strtolower($params[0]);
+            $page = isset($params[1]) ? (int)$params[1] : 1;
             $this->data['user'] = $this->model->getUserById($id);
-            $this->data['user_comments'] = $this->model->getUserComments($id);
-        }
+            $this->data['user_comments'] = $this->model->getUserComments($id,$page);
 
+            
+            $itemsCount = count($this->model->getUserComments($id));
+            $p = new Pagination(array(
+                'itemsCount' => $itemsCount,
+                'itemsPerPage' => 10,
+                'currentPage' => $page
+                ));
+
+
+            }
         
+        
+
+        $this->data['p'] = $p;
         $count_rows  = 0;
         $this->data['pagination_news'] = array();
         foreach($this->data['user_comments'] as $comment) {
@@ -137,12 +151,7 @@ class UsersController extends Controller{
             $count_rows++;
         }
 
-        // data for pagination work
-        $this->data['current_comment'] = (isset($params[0])) ? $params[0] : 0;
-        $this->data['current_pag'] = (isset($params[1])) ? $params[1] : 0;
-        $this->data['last_pag'] = (int)(count($this->data['user_comments'])/20)-1;
-
-        // data for advertising
+    
         $this->data['adv'] = $this->model->getAdvertising();
         shuffle($this->data['adv']);
         $this->data['adv_left'] = array_slice($this->data['adv'],0,4);
@@ -165,11 +174,24 @@ class UsersController extends Controller{
 
         if (isset($params[0])) {
             $id = strtolower($params[0]);
+            $page = isset($params[1]) ? (int)$params[1] : 1;
             $this->data['user'] = $this->model->getUserById($id);
-            $this->data['user_comments'] = $this->model->getUserComments($id);
-        }
+            $this->data['user_comments'] = $this->model->getUserComments($id,$page);
 
+            
+            $itemsCount = count($this->model->getUserComments($id));
+            $p = new Pagination(array(
+                'itemsCount' => $itemsCount,
+                'itemsPerPage' => 10,
+                'currentPage' => $page
+                ));
+
+
+            }
         
+        
+
+        $this->data['p'] = $p;
         $count_rows  = 0;
         $this->data['pagination_news'] = array();
         foreach($this->data['user_comments'] as $comment) {
@@ -177,10 +199,11 @@ class UsersController extends Controller{
             $count_rows++;
         }
 
-        // data for pagination work
-        $this->data['current_comment'] = (isset($params[0])) ? $params[0] : 0;
-        $this->data['current_pag'] = (isset($params[1])) ? $params[1] : 0;
-        $this->data['last_pag'] = (int)(count($this->data['user_comments'])/20)-1;
+    
+        $this->data['adv'] = $this->model->getAdvertising();
+        shuffle($this->data['adv']);
+        $this->data['adv_left'] = array_slice($this->data['adv'],0,4);
+        $this->data['adv_right'] = array_slice($this->data['adv'],3,4);
     }
 
     
@@ -203,10 +226,24 @@ class UsersController extends Controller{
 
         if (isset($params[0])) {
             $id = strtolower($params[0]);
+            $page = isset($params[1]) ? (int)$params[1] : 1;
             $this->data['user'] = $this->model->getUserById($id);
-            $this->data['user_comments'] = $this->model->getUserComments($id);
-        }
+            $this->data['user_comments'] = $this->model->getUserComments($id,$page);
 
+            
+            $itemsCount = count($this->model->getUserComments($id));
+            $p = new Pagination(array(
+                'itemsCount' => $itemsCount,
+                'itemsPerPage' => 10,
+                'currentPage' => $page
+                ));
+
+
+            }
+        
+        
+
+        $this->data['p'] = $p;
         $count_rows  = 0;
         $this->data['pagination_news'] = array();
         foreach($this->data['user_comments'] as $comment) {
@@ -214,12 +251,7 @@ class UsersController extends Controller{
             $count_rows++;
         }
 
-        // data for pagination work
-        $this->data['current_comment'] = (isset($params[0])) ? $params[0] : 0;
-        $this->data['current_pag'] = (isset($params[1])) ? $params[1] : 0;
-        $this->data['last_pag'] = (int)(count($this->data['user_comments'])/20)-1;
-
-        // data for advertising
+    
         $this->data['adv'] = $this->model->getAdvertising();
         shuffle($this->data['adv']);
         $this->data['adv_left'] = array_slice($this->data['adv'],0,4);

@@ -12,32 +12,8 @@
       break;
     default:
       break;
-  }?>
-
-<?php if ($role == '/admin' || $role == '/user') {?>
-    <form role="form" class="form-inline" action="" method="post">
-    <div class="col-md-12">
-     
-      <textarea type="text" name="text" class="text_of_comment" placeholder="Put your comment here " style="width:50%;"></textarea>
-      <br>
-      <br>
-      <img style="border: 0.5px solid gray; width:11%; background: url('/cap/bg_capcha.png');" src = "/cap/captcha.php" width="120" height="40"/>
-      <br>
-
-      <input type="text" name="capcha" placeholder="Input text from the picture">
-      <br>
-      <br>
-      <input type="submit" class="submit_comment btn btn-active" value="Submit"/>
-    </div>
-    </form>
-
-  <?php }   ?>
-
-
-
-
-
-  <?php   foreach($data['article_comments'] as $comment) {
+  }
+  foreach($data['article_comments'] as $comment) {
     if ($comment['id_parent'] == 0) { ?>
 
       <div class="container-fluid">
@@ -114,23 +90,28 @@
           <?php
         }
       }
-      
+      if ($role == '/admin' || $role == '/user') { ?>
+        <form role="form" class="form-inline" action="" method="post">
+          <div class="col-md-12">
+           
+            <textarea type="text" name="text" class="text_of_comment" placeholder="Put your answer to comment here "
+                      style="width:300%;"></textarea>
+            <input type="submit" class="submit_comment btn btn-active" value="Submit"/>
+          </div>
+        </form>
+      <?php
       }
     }
-  
- 
-  ?>
-  </div>
-<ul class="pagination">
-<?php
-if(count($data['article_comments'])){ 
-$p = $data['p'];
+  }
 
-foreach ($p->buttons as $button) :
-    if ($button->isActive) : ?>
-        <li><a href = '<?=$button->page?>'><?=$button->text?></a></li>
-    <?php else : ?>
-        <li><span style="color:#555555"><?=$button->text?></span></li>
-    <?php endif;
-endforeach; }?>
-</ul>
+  ?>
+  <?php if ($role == '/admin' || $role == '/user') {?>
+    <form role="form" class="form-inline" action="" method="post">
+    <div class="col-md-12">
+      
+      <textarea type="text" name="text" class="text_of_comment" placeholder="Put your comment here " style="width:300%;"></textarea>
+      <input type="submit" class="submit_comment btn btn-active" value="Submit"/>
+    </div>
+    </form>
+  <?php } ?>
+</div>
