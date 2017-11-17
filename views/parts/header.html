@@ -1,12 +1,13 @@
 
 
-<nav class="navbar navbar-inverse navbar-fixed-top" ><?php $role = (Session::get('role')==null) ? " " : "/" . Session::get('role'); ?>
+<nav class="navbar navbar-inverse navbar-fixed-top" >
+  <?php   $role = (Session::get('role')==null) ? " " : "/" . Session::get('role'); ?> 
     <div class="col-md-10 maincolor" style="background-color: #000000; width:100%">
     <?php include_once VIEWS_PATH.DS."requests".DS."background_color.html" ?>
     <?php include_once VIEWS_PATH.DS."requests".DS."header_color.html" ?>
     <div class="navbar-header">
 
-      <a class="navbar-brand" href="<?=$role?>/"> <?=Config::get('site_name') . "-" . Session::get('login')?></a>
+      <a class="navbar-brand" href="<?=$role?>/"> <?=Config::get('site_name') . " " . Session::get('login')?></a>
     </div>
 
     <div class="collapse navbar-collapse">

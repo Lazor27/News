@@ -134,7 +134,8 @@ SELECT *
             }
             echo $user_color;
         } else {
-            echo '#8D0005';
+           // echo '#8D0005';
+           echo '#000000'; 
         }
         exit;
     }

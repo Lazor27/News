@@ -359,14 +359,24 @@ SELECT YEAR(news.create_date_time) AS value, 'Год' AS id
      * get all analitycal news
      * @return mixed
      */
-    public function getAnalyticalList()
-    {
+    public function getAnalyticalList($page = null)
+    {   
+      if (isset($page)){
+        $count = 50;
+        $ofset = ($page - 1) * $count;
         $sql = "
-SELECT * 
-  FROM news
-    WHERE news.analytical=1
-";
-        return $this->db->query($sql);;
+          SELECT * 
+            FROM news
+              WHERE news.analytical=1
+                LIMIT {$ofset}, {$count}";
+        }else{
+
+        $sql = "
+          SELECT * 
+            FROM news
+              WHERE news.analytical=1";
+        }
+      return $this->db->query($sql);;
     }
 
     /**

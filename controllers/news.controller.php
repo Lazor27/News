@@ -244,8 +244,17 @@ class NewsController extends Controller {
      *action for analytical articles /
      */
     public function admin_analytical()
-    {
-        $this->data['news'] = $this->model->getAnalyticalList();
+    {   $params = App::getRouter()->getParams();
+		$page = isset($params[0]) ? (int)$params[0] : 1;
+        $itemsCount = count($this->model->getAnalyticalList());
+                        $p = new Pagination(array(
+                            'itemsCount' => $itemsCount,
+                            'itemsPerPage' => 50,
+                            'currentPage' => $page
+                            ));
+            $this->data['p'] = $p;
+        $this->data['news'] = $this->model->getAnalyticalList($page);
+
     }
 
   
@@ -468,7 +477,24 @@ class NewsController extends Controller {
     
     public function user_analytical()
     {
-        $this->data['news'] = $this->model->getAnalyticalList();
+        $params = App::getRouter()->getParams();
+
+        $page = isset($params[0]) ? (int)$params[0] : 1;
+
+        $itemsCount = count($this->model->getAnalyticalList());
+                        $p = new Pagination(array(
+                            'itemsCount' => $itemsCount,
+                            'itemsPerPage' => 50,
+                            'currentPage' => $page
+                            ));
+            $this->data['p'] = $p;
+        $this->data['news'] = $this->model->getAnalyticalList($page);
+        
+
+
+
+
+
 
         // data for advertising
         $this->data['adv'] = $this->model->getAdvertising();

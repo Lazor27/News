@@ -73,12 +73,9 @@ class HomeController extends Controller {
         
         // data for top 3 topics with the most comments for previous day
         $this->data['topics'] = $this->model->getTopThreeTopics();
+        //var_dump($this->data['topics']);
         
-        // data for building categories tree TODONE fill data
-        $this->data['cat'] = $this->model->getCategoryTree();
-        $this->data['tree_news'] = $this->model->getNewsByCategory();
-        $this->data['tree'] = "";
-        $this->build_tree(0,0);
+        
 
         // data news titles for categories tree
         $this->data['news'] = $this->model->getNewsByCategory();

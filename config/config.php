@@ -1,6 +1,6 @@
 <?php
 
-Config::set('site_name','news');
+Config::set('site_name','NEWS');
 Config::set(
     'routes', array (
         'default'   => '',

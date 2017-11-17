@@ -67,7 +67,8 @@ class UsersController extends Controller{
 
 
         if ($_POST) {
-            if (!empty($_POST['first_name']) && !empty($_POST['second_name'])&& !empty($_POST['login_name']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['date_of_birth'])) {
+            if (!empty($_POST['first_name']) && !empty($_POST['second_name'])&& !empty($_POST['login_name']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['date_of_birth']) && !empty($_POST['capcha']) ) {
+                    if($_POST['capcha'] == Session::get('capcha')){
 
                 $first_name  = $_POST['first_name'];
                 $second_name = $_POST['second_name'];
@@ -98,6 +99,10 @@ class UsersController extends Controller{
                 
                 
                 Router::redirect('/users/login/'); // to the home page
+                }else{
+                    Session::setFlash('Please check captcha!');
+
+                }
             } else { 
                 Session::setFlash('Please fill in all fields!');
             }
